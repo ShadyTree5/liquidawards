@@ -1,27 +1,9 @@
-Question,Q1 Most Iconic Duo,Q2 The Scalpel,Q3 The Vibes,Q4 The Lionheart,Q5 Best Injury,Q6 Best Medic,Q7 Existential Crisis,Q8 Hottest Opposition,Q9 Flake on Training,Q10 Strategic Consultant,Q11 Panic Under Pressure,Q12 Most Fulfilled,Q13 Best Pub Chat,Q14 Least Racist,Q15 Most Improved
-Ed & Oli,4,0,0,1,0,0,0,0,0,1,0,0,0,0,0
-Rachel,0,5,0,0,0,0,0,0,0,0,1,2,0,0,5
-Izzy,0,0,5,1,0,0,0,0,0,0,0,0,1,1,0
-Oli,0,0,0,4,0,0,3,0,0,0,0,0,1,1,0
-Team sports guy from Tuesday,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
-Georgie,0,0,2,0,3,6,0,0,0,0,0,0,0,0,0
-Max,0,2,1,0,0,0,1,0,2,1,0,0,2,0,0
-Man City Girl,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0
-Arran,0,0,0,0,0,0,1,0,6,2,2,1,1,0,0
-Ed,1,0,0,1,0,2,0,0,0,4,0,0,0,3,2
-Ben,0,1,0,0,0,0,1,0,0,0,2,4,2,0,0
-Fran,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0
-Sam,0,0,0,0,2,0,1,0,0,0,0,1,0,0,0
-Oli / Max,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0
-None,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0
-Georgie & Arran,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-Arran's finger,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0
-Fridge guy from AA,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
-Me,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
-Not Arran,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0
-Don't know,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
-N/A,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
-No-one,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1
-Oli and Ben,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0
-Max & Ed,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-Team sports Goalie,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+Question,Most iconic duo,The Scalpal (most awkward but effective technique),The Vibes (person who always brings the energy),The Lionheart (person who shows most passion / emotion during games),Best injury,Best medic,Most likely to have an existential crisis,Hottest opposition player,Most likely to flake on training,Best strategic consultant,Most likely to panic under pressure,Most fulfilled in life,Best pub chat,Least racist,Most improved
+Max,Ed & Oli,Rachel,Izzy,Oli,Arran's finger,Georgie,Arran,Man City Girl,Arran,Ed,Ben,Ben,Ben,Ed,Rachel
+Ben,Ed & Oli,Rachel,Izzy,Oli,Team sports guy from Tuesday,Georgie,Max,Man City Girl,Arran,Ed,Arran,Ben,Fran,Izzy,Rachel
+Arran,Ed,Ben,Izzy,Oli,Sam,Georgie,Sam,Timber,Arran,Max,Rachel,Rachel,Max,Ed,Rachel
+Georgie,Ed & Oli,Rachel,Izzy,Ed & Oli,Sam,Ed,Oli / Max,None,Arran,Ed,Ben,Rachel,Oli,Ed,Ed
+Izzy,Georgie & Arran,Rachel,Max,Oli,Arran's finger,Georgie,Oli,Fridge guy from AA,Max,Ed,Me,Ben,Ben,Not Arran,Ed
+Rachel,Ed & Oli,Max,Georgie,Izzy,Georgie,Georgie,Ben,Don't know,Max,Ed & Oli,N/A,Arran,Arran,No-one,No-one
+Ed,Oli and Ben,Max,Izzy,Oli and Ben,Georgie,Georgie,Oli,Man City Girl,Arran,Arran,None,Ben,Max,Oli,Rachel
+Oli,Max & Ed,Rachel,Georgie,Ed,Georgie,Ed,Oli,Team sports Goalie,Arran,Arran,Arran,Sam,Izzy,No-one,Rachel
