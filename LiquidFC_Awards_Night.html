@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Liquid FC Awards Night</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #111; font-family: 'Barlow Condensed', sans-serif; color: #fff; height: 100vh; overflow: hidden; user-select: none; }
+  #app { width: 100vw; height: 100vh; position: relative; }
+  .slide { position: absolute; inset: 0; display: none; flex-direction: column; }
+  .slide.active { display: flex; }
+  #config { position: absolute; inset: 0; background: #0a0a0a; display: flex; align-items: center; justify-content: center; z-index: 100; flex-direction: column; gap: 24px; padding: 40px; }
+  #config h1 { font-family: 'Anton', sans-serif; font-size: 36px; color: #F5C518; letter-spacing: 2px; }
+  #config p { color: #888; font-size: 16px; text-align: center; max-width: 560px; line-height: 1.6; }
+  #config input { width: 100%; max-width: 600px; padding: 14px 18px; background: #1a1a1a; border: 1.5px solid #333; border-radius: 8px; color: #fff; font-size: 15px; font-family: 'Barlow Condensed', sans-serif; outline: none; }
+  #config input:focus { border-color: #F5C518; }
+  #config input::placeholder { color: #555; }
+  .btn-yellow { background: #F5C518; color: #111; border: none; padding: 14px 40px; font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 2px; cursor: pointer; border-radius: 4px; }
+  .btn-yellow:hover { background: #ffd000; }
+  .btn-grey { background: #333; color: #fff; border: none; padding: 14px 40px; font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 2px; cursor: pointer; border-radius: 4px; }
+  .btn-grey:hover { background: #444; }
+  .config-note { font-size: 12px; color: #555; text-align: center; max-width: 600px; line-height: 1.8; }
+  #slide-title { background: #111; }
+  .title-top { background: #F5C518; flex: 0 0 38%; display: flex; align-items: center; justify-content: center; }
+  .title-stripe { flex: 0 0 8px; background: #E8387A; }
+  .title-bottom { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+  .title-main { font-family: 'Anton', sans-serif; font-size: clamp(48px, 9vw, 96px); color: #fff; letter-spacing: 6px; }
+  .title-sub { font-family: 'Anton', sans-serif; font-size: clamp(28px, 5vw, 54px); color: #F5C518; letter-spacing: 4px; }
+  .logo-circle { width: 110px; height: 110px; background: #fff; border-radius: 50%; border: 5px solid #111; display: flex; align-items: center; justify-content: center; font-family: 'Anton', sans-serif; font-size: 13px; color: #111; text-align: center; line-height: 1.3; letter-spacing: 1px; }
+  .slide-question { background: #111; }
+  .q-top-bar { flex: 0 0 8px; background: #F5C518; }
+  .q-content { flex: 1; padding: 32px 48px; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+  .q-badge-row { display: flex; align-items: center; gap: 16px; }
+  .q-badge { background: #F5C518; color: #111; font-family: 'Anton', sans-serif; font-size: 18px; padding: 6px 16px; letter-spacing: 2px; }
+  .q-category { font-size: 13px; color: #888; letter-spacing: 3px; text-transform: uppercase; }
+  .q-emoji { font-size: 36px; }
+  .q-title { font-family: 'Anton', sans-serif; font-size: clamp(36px, 6.5vw, 72px); color: #fff; letter-spacing: 2px; line-height: 1.05; text-transform: uppercase; }
+  .q-bottom-bar { flex: 0 0 44px; background: #E8387A; display: flex; align-items: center; padding: 0 48px; font-size: 12px; color: #fff; letter-spacing: 2px; justify-content: space-between; }
+  .slide-top3 { background: #111; }
+  .top3-header { flex: 0 0 80px; background: #F5C518; display: flex; align-items: center; padding: 0 24px; gap: 16px; }
+  .top3-header-title { font-family: 'Anton', sans-serif; font-size: clamp(16px, 2.5vw, 26px); color: #111; letter-spacing: 1px; text-transform: uppercase; }
+  .top3-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; }
+  .top3-label { font-family: 'Anton', sans-serif; font-size: 13px; color: #F5C518; letter-spacing: 6px; margin-bottom: 6px; }
+  .podium { display: flex; align-items: flex-end; justify-content: center; gap: 12px; width: 100%; max-width: 820px; }
+  .card { flex: 1; display: flex; flex-direction: column; border-radius: 4px; overflow: hidden; opacity: 0; transform: translateY(60px); transition: opacity 0.45s ease, transform 0.45s ease; }
+  .card.visible { opacity: 1; transform: translateY(0); }
+  .card-badge { padding: 10px; font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 2px; text-align: center; }
+  .card-name { flex: 1; display: flex; align-items: center; justify-content: center; padding: 16px 12px; font-family: 'Anton', sans-serif; font-size: clamp(16px, 2.8vw, 26px); letter-spacing: 1px; text-align: center; min-height: 70px; line-height: 1.2; }
+  .card-3rd { background: #2a2a2a; min-height: 160px; }
+  .card-3rd .card-badge { background: #444; color: #ccc; }
+  .card-3rd .card-name { color: #ddd; }
+  .card-2nd { background: #fff; min-height: 180px; }
+  .card-2nd .card-badge { background: #999; color: #fff; }
+  .card-2nd .card-name { color: #111; }
+  .card-1st { background: #F5C518; min-height: 200px; }
+  .card-1st .card-badge { background: #111; color: #F5C518; }
+  .card-1st .card-name { color: #111; }
+  .click-hint { font-size: 12px; color: #555; letter-spacing: 2px; margin-top: 8px; text-transform: uppercase; }
+  .click-hint span { color: #E8387A; }
+  .slide-breakdown { background: #F9F6EF; position: relative; }
+  .breakdown-left-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background: #F5C518; }
+  .breakdown-header { flex: 0 0 56px; background: #111; display: flex; align-items: center; padding: 0 16px 0 28px; }
+  .breakdown-header-text { font-family: 'Anton', sans-serif; font-size: clamp(11px, 1.6vw, 16px); color: #F5C518; letter-spacing: 1px; text-transform: uppercase; }
+  .breakdown-body { flex: 1; display: flex; padding: 16px 24px 16px 28px; gap: 20px; overflow: hidden; }
+  .bars-section { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; }
+  .bar-label { width: 130px; flex-shrink: 0; font-size: clamp(11px, 1.3vw, 14px); color: #333; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { flex: 1; background: #e0ddd5; border-radius: 2px; height: 28px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; display: flex; align-items: center; padding-right: 8px; justify-content: flex-end; min-width: 28px; }
+  .bar-pct { font-family: 'Anton', sans-serif; font-size: 13px; color: #fff; }
+  .table-section { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; }
+  .table-header { background: #111; color: #F5C518; font-family: 'Anton', sans-serif; font-size: 13px; letter-spacing: 2px; padding: 8px 12px; text-align: center; }
+  .table-row { display: flex; align-items: center; padding: 7px 10px; gap: 8px; font-size: 13px; }
+  .table-row:nth-child(odd) { background: #eeeae0; }
+  .table-row:nth-child(even) { background: #fff; }
+  .table-rank { font-family: 'Anton', sans-serif; font-size: 16px; width: 22px; text-align: center; }
+  .table-name { flex: 1; color: #222; font-weight: 600; }
+  .table-votes { color: #888; font-size: 12px; white-space: nowrap; }
+  #slide-outro { background: #111; }
+  .outro-top { flex: 0 0 35%; background: #F5C518; display: flex; align-items: center; justify-content: center; }
+  .outro-stripe { flex: 0 0 8px; background: #E8387A; }
+  .outro-bottom { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+  .outro-wrap { font-family: 'Anton', sans-serif; font-size: clamp(40px, 7vw, 80px); color: #fff; letter-spacing: 4px; }
+  .outro-club { font-family: 'Anton', sans-serif; font-size: clamp(20px, 3vw, 32px); color: #F5C518; letter-spacing: 4px; }
+  .outro-tagline { font-size: 16px; color: #888; font-style: italic; margin-top: 4px; }
+  #nav { position: fixed; bottom: 16px; right: 20px; display: flex; gap: 8px; z-index: 50; opacity: 0.4; }
+  #nav:hover { opacity: 1; }
+  .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 14px; font-family: 'Anton', sans-serif; font-size: 13px; letter-spacing: 1px; cursor: pointer; border-radius: 3px; }
+  .nav-btn:hover { background: rgba(255,255,255,0.2); }
+  #slide-counter { position: fixed; bottom: 20px; left: 20px; font-size: 11px; color: #555; letter-spacing: 1px; z-index: 50; }
+  #loading { position: fixed; inset: 0; background: #111; display: flex; align-items: center; justify-content: center; z-index: 200; flex-direction: column; gap: 16px; }
+  #loading.hidden { display: none; }
+  .spinner { width: 36px; height: 36px; border: 3px solid #333; border-top-color: #F5C518; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #loading p { color: #888; font-size: 14px; letter-spacing: 2px; }
+</style>
+</head>
+<body>
+<div id="loading"><div class="spinner"></div><p>LIQUID FC AWARDS NIGHT</p></div>
+<div id="config" style="display:none">
+  <h1>LIQUID FC AWARDS NIGHT</h1>
+  <p>Paste your Google Sheet URL below to load live data, or use demo data to preview.</p>
+  <div style="width:100%;max-width:600px;display:flex;flex-direction:column;gap:10px">
+    <input id="sheet-url" type="text" placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/..." />
+    <p class="config-note">
+      In Google Sheets: <b>File → Share → Publish to web → Entire Document → Web page → Publish</b><br>
+      Then paste the spreadsheet URL above (just needs the sheet ID).
+    </p>
+  </div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+    <button class="btn-yellow" onclick="loadFromSheet()">LOAD MY DATA</button>
+    <button class="btn-grey" onclick="loadDemoData()">USE DEMO DATA</button>
+  </div>
+</div>
+<div id="app"></div>
+<div id="nav" style="display:none">
+  <button class="nav-btn" onclick="prevAction()">◀ PREV</button>
+  <button class="nav-btn" onclick="nextAction()">NEXT ▶</button>
+</div>
+<div id="slide-counter" style="display:none"></div>
+
+<script>
+const QUESTIONS=[{id:1,emoji:"👫",title:"Most Iconic Duo"},{id:2,emoji:"🔪",title:"The Scalpel"},{id:3,emoji:"⚡",title:"The Vibes"},{id:4,emoji:"🦁",title:"The Lionheart"},{id:5,emoji:"🏥",title:"Best Injury"},{id:6,emoji:"💉",title:"Best Medic"},{id:7,emoji:"🌀",title:"Most Likely to Have an Existential Crisis"},{id:8,emoji:"😍",title:"Hottest Opposition Player"},{id:9,emoji:"👻",title:"Most Likely to Flake on Training"},{id:10,emoji:"🧠",title:"Best Strategic Consultant"},{id:11,emoji:"😰",title:"Most Likely to Panic Under Pressure"},{id:12,emoji:"🌟",title:"Most Fulfilled in Life"},{id:13,emoji:"🍺",title:"Best Pub Chat"},{id:14,emoji:"🕊️",title:"Least Racist"},{id:15,emoji:"📈",title:"Most Improved"}];
+const CHART_COLORS=["#F5C518","#E8387A","#777","#7EC8C8","#F5A623","#9B59B6","#2ECC71","#E74C3C"];
+let slides=[],currentSlide=0;
+
+function tally(answers){
+  const counts={};
+  answers.filter(Boolean).forEach(a=>{counts[a]=(counts[a]||0)+1;});
+  const total=answers.filter(Boolean).length;
+  return Object.entries(counts).map(([name,count])=>({name,count,pct:Math.round(count/total*1000)/10})).sort((a,b)=>b.count-a.count);
+}
+
+function loadDemoData(){
+  const demo=[
+    ["Ben & Max","Ben & Max","Arran & Ed","Ben & Max","Georgie & Izzy","Arran & Ed","Ben & Max","Olly & Rachel"],
+    ["Arran","Ben","Arran","Georgie","Arran","Max","Arran","Izzy"],
+    ["Max","Max","Georgie","Max","Izzy","Max","Olly","Max"],
+    ["Rachel","Rachel","Ben","Rachel","Ed","Rachel","Arran","Rachel"],
+    ["Ed knee","Ed knee","Arran ankle","Ed knee","Ben toe","Ed knee","Max shoulder","Olly wrist"],
+    ["Georgie","Georgie","Ben","Georgie","Izzy","Georgie","Arran","Georgie"],
+    ["Ben","Olly","Ben","Georgie","Ben","Izzy","Ben","Rachel"],
+    ["Opposition No.9","Opposition No.9","Opposition No.7","Opposition No.9","Opposition No.9","Opposition No.3","Opposition No.9","Opposition No.9"],
+    ["Ed","Ed","Olly","Ed","Max","Ed","Ben","Ed"],
+    ["Arran","Arran","Ben","Max","Arran","Rachel","Arran","Georgie"],
+    ["Ben","Georgie","Ben","Izzy","Ben","Olly","Max","Ben"],
+    ["Rachel","Rachel","Georgie","Rachel","Arran","Rachel","Ben","Rachel"],
+    ["Max","Max","Ben","Max","Olly","Max","Arran","Max"],
+    ["Olly","Ben","Max","Olly","Arran","Olly","Ed","Olly"],
+    ["Georgie","Georgie","Ben","Georgie","Max","Georgie","Arran","Georgie"],
+  ];
+  buildPresentation(demo.map(a=>tally(a)));
+}
+
+function loadFromSheet(){
+  const url=document.getElementById('sheet-url').value.trim();
+  if(!url){alert('Please enter your Google Sheet URL');return;}
+  const m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if(!m){alert('Could not find a Sheet ID in that URL. Make sure you paste the full Google Sheets URL.');return;}
+  document.getElementById('config').style.display='none';
+  document.getElementById('loading').classList.remove('hidden');
+  fetchAllSheets(m[1]);
+}
+
+async function fetchAllSheets(sheetId){
+  const data=[];
+  for(let i=0;i<QUESTIONS.length;i++){
+    const name=`Q${i+1}`;
+    const url=`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(name)}`;
+    try{
+      const res=await fetch(url);
+      const text=await res.text();
+      const rows=text.split('\n').slice(3,11);
+      const answers=rows.map(r=>{const c=r.split(',');return(c[1]||'').replace(/^"|"$/g,'').trim();}).filter(Boolean);
+      data.push(tally(answers));
+    }catch(e){data.push([]);}
+  }
+  buildPresentation(data);
+}
+
+function buildPresentation(allData){
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('config').style.display='none';
+  const app=document.getElementById('app');
+  app.innerHTML='';slides=[];
+
+  // Title
+  const ts=mk('div','slide active');ts.id='slide-title';
+  ts.innerHTML=`<div class="title-top"><div class="logo-circle">LIQUID<br>FC</div></div><div class="title-stripe"></div><div class="title-bottom"><div class="title-main">LIQUID FC</div><div class="title-sub">AWARDS NIGHT</div></div>`;
+  app.appendChild(ts);slides.push({el:ts,type:'title'});
+
+  QUESTIONS.forEach((q,i)=>{
+    const t=allData[i]||[];
+    const top3=[t[0]?.name||'—',t[1]?.name||'—',t[2]?.name||'—'];
+
+    // Question reveal
+    const qs=mk('div','slide slide-question');
+    qs.innerHTML=`<div class="q-top-bar"></div><div class="q-content"><div class="q-badge-row"><div class="q-badge">Q${q.id}</div><span class="q-category">AWARD CATEGORY</span><span class="q-emoji">${q.emoji}</span></div><div class="q-title">${q.title}</div></div><div class="q-bottom-bar"><span>${q.id} OF 15</span><span>LIQUID FC AWARDS</span></div>`;
+    app.appendChild(qs);slides.push({el:qs,type:'question'});
+
+    // Top 3
+    const ts3=mk('div','slide slide-top3');
+    ts3.innerHTML=`<div class="top3-header"><div class="logo-circle" style="width:52px;height:52px;font-size:7px;border-width:3px">LIQUID FC</div><div class="top3-header-title">Q${q.id}: ${q.title}</div></div><div class="top3-body"><div class="top3-label">TOP 3</div><div class="podium"><div class="card card-2nd" id="c2-${i}"><div class="card-badge">2ND</div><div class="card-name">${top3[1]}</div></div><div class="card card-1st" id="c1-${i}"><div class="card-badge">1ST</div><div class="card-name">${top3[0]}</div></div><div class="card card-3rd" id="c3-${i}"><div class="card-badge">3RD</div><div class="card-name">${top3[2]}</div></div></div><div class="click-hint">CLICK TO REVEAL — <span>3RD → 2ND → 1ST</span></div></div>`;
+    app.appendChild(ts3);slides.push({el:ts3,type:'top3',qIdx:i,step:0});
+
+    // Breakdown
+    const bs=mk('div','slide slide-breakdown');
+    const maxPct=t.length?Math.max(...t.map(x=>x.pct)):100;
+    let bars='',trows='';
+    t.forEach((item,bi)=>{
+      const w=Math.round((item.pct/maxPct)*100);
+      const col=CHART_COLORS[bi%CHART_COLORS.length];
+      bars+=`<div class="bar-row"><div class="bar-label">${item.name}</div><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${col}"><span class="bar-pct">${item.pct}%</span></div></div></div>`;
+      trows+=`<div class="table-row"><div class="table-rank" style="color:${col}">${bi+1}</div><div class="table-name">${item.name}</div><div class="table-votes">${item.count}v · ${item.pct}%</div></div>`;
+    });
+    bs.innerHTML=`<div class="breakdown-left-bar"></div><div class="breakdown-header"><div class="breakdown-header-text">Q${q.id}: ${q.title.toUpperCase()} — FULL VOTE BREAKDOWN</div></div><div class="breakdown-body"><div class="bars-section">${bars||'<p style="color:#888;padding:20px;font-size:16px">No data yet — fill in the Google Sheet</p>'}</div><div class="table-section"><div class="table-header">RESULTS</div>${trows||''}</div></div>`;
+    app.appendChild(bs);slides.push({el:bs,type:'breakdown'});
+  });
+
+  // Outro
+  const os=mk('div','slide');os.id='slide-outro';
+  os.innerHTML=`<div class="outro-top"><div class="logo-circle" style="width:120px;height:120px;font-size:14px">LIQUID<br>FC</div></div><div class="outro-stripe"></div><div class="outro-bottom"><div class="outro-wrap">THAT'S A WRAP.</div><div class="outro-club">LIQUID FC</div><div class="outro-tagline">Congrats to all winners. Now get to the bar.</div></div>`;
+  app.appendChild(os);slides.push({el:os,type:'outro'});
+
+  currentSlide=0;
+  document.getElementById('nav').style.display='flex';
+  document.getElementById('slide-counter').style.display='block';
+  updateCounter();
+  document.addEventListener('keydown',onKey);
+  document.addEventListener('click',onClickAnywhere);
+}
+
+function mk(tag,cls){const e=document.createElement(tag);e.className=cls;return e;}
+
+function onKey(e){
+  if(['ArrowRight',' ','Enter'].includes(e.key)){e.preventDefault();nextAction();}
+  if(e.key==='ArrowLeft'){e.preventDefault();prevAction();}
+}
+function onClickAnywhere(e){
+  if(e.target.closest('#nav')||e.target.closest('#config')||e.target.closest('#loading'))return;
+  nextAction();
+}
+function nextAction(){
+  const cur=slides[currentSlide];
+  if(cur&&cur.type==='top3'){
+    const s=cur.step||0,i=cur.qIdx;
+    if(s===0){document.getElementById(`c3-${i}`).classList.add('visible');cur.step=1;updateCounter();return;}
+    if(s===1){document.getElementById(`c2-${i}`).classList.add('visible');cur.step=2;updateCounter();return;}
+    if(s===2){document.getElementById(`c1-${i}`).classList.add('visible');cur.step=3;updateCounter();return;}
+  }
+  goToSlide(currentSlide+1);
+}
+function prevAction(){
+  const cur=slides[currentSlide];
+  if(cur&&cur.type==='top3'&&(cur.step||0)>0){
+    const s=cur.step,i=cur.qIdx;
+    if(s===3){document.getElementById(`c1-${i}`).classList.remove('visible');cur.step=2;updateCounter();return;}
+    if(s===2){document.getElementById(`c2-${i}`).classList.remove('visible');cur.step=1;updateCounter();return;}
+    if(s===1){document.getElementById(`c3-${i}`).classList.remove('visible');cur.step=0;updateCounter();return;}
+  }
+  goToSlide(currentSlide-1);
+}
+function goToSlide(idx){
+  if(idx<0||idx>=slides.length)return;
+  slides[currentSlide].el.classList.remove('active');
+  currentSlide=idx;
+  slides[currentSlide].el.classList.add('active');
+  updateCounter();
+}
+function updateCounter(){
+  const cur=slides[currentSlide];
+  let extra='';
+  if(cur&&cur.type==='top3'){const s=cur.step||0;extra=` · ${s}/3 revealed`;}
+  document.getElementById('slide-counter').textContent=`${currentSlide+1} / ${slides.length}${extra}`;
+}
+window.addEventListener('load',()=>{
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('config').style.display='flex';
+});
+</script>
+</body>
+</html>
